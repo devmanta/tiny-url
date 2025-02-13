@@ -1,24 +1,55 @@
-name: main-deployment
+name: Deploy to Amazon ECS
 
 on:
   push:
     branches:
       - 'main'
 
+env:
+  AWS_REGION: ap-northeast-2
+  ECR_REPOSITORY: tiny-url-spring-api
+  ECS_CLUSTER: tiny-url-spring-api-cluster
+  ECS_SERVICE: tiny-url-spring-api-service
+
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3.3.0
 
-      - name: Deployment
-        uses: appleboy/ssh-action@master
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
         with:
-          host: ${{ secrets.REMOTE_SSH_URL }}
-          username: ${{ secrets.REMOTE_SSH_USER }}
-          key: ${{ secrets.REMOTE_SSH_KEY }}
-          port: ${{ secrets.REMOTE_SSH_PORT }}
-          script: |
-            cd ${{ secrets.REMOTE_APP_PATH }}
-            git switch main
-            git pull
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Update ECS service
+        run: |
+          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
