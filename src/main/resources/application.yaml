@@ -3,3 +3,8 @@ spring:
     redis:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
       port: ${SPRING_DATA_REDIS_PORT:6379}
+
+aws:
+  dynamodb:
+    endpoint: http://localhost:8000
+#    region: us-northeast-2
