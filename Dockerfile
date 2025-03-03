@@ -2,10 +2,6 @@ FROM amazoncorretto:21-alpine
 
 WORKDIR /app
 
-# 타임존 설정
-RUN apk add --no-cache tzdata
-ENV TZ=Asia/Seoul
-
 # 애플리케이션 JAR 파일 복사
 COPY build/libs/*.jar app.jar
 
