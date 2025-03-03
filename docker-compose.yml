@@ -19,12 +19,11 @@ services:
       - dynamodb-data:/home/dynamodblocal/data
     restart: always
 
-
-  springboot-app:
+  tiny-url-backend-app:
     build:
       context: ./
       dockerfile: Dockerfile
-    container_name: springboot-app
+    container_name: tiny-url-backend-app
     ports:
       - "8080:8080"
     depends_on:
