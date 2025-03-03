@@ -18,7 +18,6 @@ public class DynamoTestRepository {
     private static final String TABLE_NAME = "Users";
 
     public void createTable() {
-        // 테이블 생성 요청
         CreateTableRequest createTableRequest = CreateTableRequest.builder()
                 .tableName(TABLE_NAME)
                 .keySchema(KeySchemaElement.builder()
