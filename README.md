@@ -1,4 +1,4 @@
-## API Definition
+## 1. API Definition
 
 ### Overview
 
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 ```
 
-- **Response:**
+- **Response(Success):**
 
 ```http
 HTTP/1.1 200 OK
@@ -27,6 +27,27 @@ Content-Type: application/json
 
 {
   "tinyUrl": "https://short.ly/abc123"
+}
+```
+
+- **Response(Error):**
+- In case of an invalid request (e.g., missing or malformed originalUrl), the API will return an error response:
+
+```http
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "error": "Invalid URL format"
+}
+```
+
+```http
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": "Server error, please try again later"
 }
 ```
 
@@ -38,14 +59,25 @@ Content-Type: application/json
 GET /{tinyUrl}
 ```
 
-- **Response:**
+- **Response(Success):**
 
 ```http
 HTTP/1.1 301 Moved Permanently
 Location: https://example.com
 ```
+- **Response(Error):**
 
-## Sequence Diagram
+```http
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "error": "Tiny URL not found"
+}
+```
+
+<br>
+## 2. Sequence Diagram
 ```mermaid
 sequenceDiagram
     participant C as Client
@@ -83,7 +115,8 @@ sequenceDiagram
     end
 ```
 
-## Running the Server Locally
+<br>
+## 3. Running the Server Locally
 
 1. Clone the repository:
    ```bash
