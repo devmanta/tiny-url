@@ -82,3 +82,21 @@ sequenceDiagram
     API-->>-C: 301/302 Redirect (to original URL)
     end
 ```
+
+## Running the Server Locally
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/devmanta/tiny-url.git
+
+2. Navigate to the root directory of the cloned repository:
+   ```bash
+   cd tiny-url # Example
+
+3. Start the server with Docker Compose:
+   ```bash
+   docker-compose up -d
+
+4. To stop the server, run:
+   ```bash
+   docker-compose down
