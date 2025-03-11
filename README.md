@@ -77,6 +77,7 @@ Content-Type: application/json
 ```
 
 <br>
+
 ## 2. Sequence Diagram
 ```mermaid
 sequenceDiagram
@@ -116,6 +117,7 @@ sequenceDiagram
 ```
 
 <br>
+
 ## 3. Running the Server Locally
 
 1. Clone the repository:
