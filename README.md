@@ -38,6 +38,7 @@ HTTP/1.1 400 Bad Request
 Content-Type: application/json
 
 {
+  "tinyUrl": null,
   "error": "Invalid URL format"
 }
 ```
@@ -47,6 +48,7 @@ HTTP/1.1 500 Internal Server Error
 Content-Type: application/json
 
 {
+  "tinyUrl": null,
   "error": "Server error, please try again later"
 }
 ```
