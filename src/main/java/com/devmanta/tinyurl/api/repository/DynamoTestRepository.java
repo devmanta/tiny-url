@@ -18,6 +18,11 @@ public class DynamoTestRepository {
     private static final String TABLE_NAME = "Users";
 
     public void createTable() {
+        ListTablesResponse listTablesResponse = dynamoDbClient.listTables();
+        if (listTablesResponse.tableNames().contains(TABLE_NAME)) {
+            return;
+        }
+
         CreateTableRequest createTableRequest = CreateTableRequest.builder()
                 .tableName(TABLE_NAME)
                 .keySchema(KeySchemaElement.builder()
