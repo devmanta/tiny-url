@@ -1,3 +1,19 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-jenkins:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Jenkins API
+        run: |
+          curl -X POST "http://ec2-13-209-21-52.ap-northeast-2.compute.amazonaws.com:8080/job/tiny-url-pipeline/build" \
+          --user "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}"
+
 #name: Deploy to AWS ECS
 #
 #on:
